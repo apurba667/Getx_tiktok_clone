@@ -6,7 +6,8 @@ import 'package:uuid/uuid.dart';
 import 'package:video_compress/video_compress.dart';
 import 'dart:io';
 
-import '../model/video_model.dart';
+import '../model/video.dart';
+import '../view/screens/Home.dart';
 
 
 
@@ -19,13 +20,13 @@ class VideoUploadController extends GetxController{
     return thumbnail;
   }
 
-  Future<String> _uploadVideoThumbToStorage(String id , String videoPath) async{
-    Reference reference = FirebaseStorage.instance.ref().child("thumbnail").child(id);
-    UploadTask uploadTask = reference.putFile(await _getThumb(videoPath));
-    TaskSnapshot snapshot = await uploadTask;
-    String downloadUrl = await snapshot.ref.getDownloadURL();
-    return downloadUrl;
-  }
+ Future<String> _uploadVideoThumbToStorage(String id , String videoPath) async{
+  Reference reference = FirebaseStorage.instance.ref().child("thumbnail").child(id);
+  UploadTask uploadTask = reference.putFile(await _getThumb(videoPath));
+  TaskSnapshot snapshot = await uploadTask;
+  String downloadUrl = await snapshot.ref.getDownloadURL();
+  return downloadUrl;
+}
 
   //Main Video Upload
   //Video To Storage
@@ -36,32 +37,32 @@ class VideoUploadController extends GetxController{
   uploadVideo(String songName , String caption , String videoPath) async{
 
     try{
-      String uid = FirebaseAuth.instance.currentUser!.uid;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
 
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(uid).get();
-      //videoID - uuid
-      String id  = uuid.v1();
-      String videoUrl = await _uploadVideoToStorage( id, videoPath);
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    //videoID - uuid
+    String id  = uuid.v1();
+    String videoUrl = await _uploadVideoToStorage( id, videoPath);
 
-      String thumbnail  = await   _uploadVideoThumbToStorage(id , videoPath);
-
-      print((userDoc.data()! as Map<String , dynamic>).toString());
-      Video video = Video(
-          uid: uid,
-          username: (userDoc.data()! as Map<String , dynamic>)['name'],
-          videoUrl: videoUrl,
-          thumbnail: thumbnail,
-          songName: songName,
-          shareCount: 0,
-          commentsCount: 0,
-          likes: [],
-          profilePic: (userDoc.data()! as Map<String , dynamic>)['profilePic'],
-          caption: caption,
-          id: id
-      );
-      await FirebaseFirestore.instance.collection("videos").doc(id).set(video.toJson());
-      Get.snackbar("Video Uploaded Successfully", "Thank You Sharing Your Content");
-      Get.back();
+    String thumbnail  = await   _uploadVideoThumbToStorage(id , videoPath);
+    //IDHAR SE
+    print((userDoc.data()! as Map<String , dynamic>).toString());
+    Video video = Video(
+      uid: uid,
+      username: (userDoc.data()! as Map<String , dynamic>)['name'],
+      videoUrl: videoUrl,
+      thumbnail: thumbnail,
+      songName: songName,
+      shareCount: 0,
+      commentsCount: 0,
+      likes: [],
+      profilePic: (userDoc.data()! as Map<String , dynamic>)['profilePic'],
+      caption: caption,
+      id: id
+    );
+    await FirebaseFirestore.instance.collection("videos").doc(id).set(video.toJson());
+    Get.snackbar("Video Uploaded Successfully", "Thank You Sharing Your Content");
+Get.to(HomeScreen());
     }catch(e){
 
       print(e);
@@ -72,7 +73,7 @@ class VideoUploadController extends GetxController{
 
   Future<String> _uploadVideoToStorage(String videoID , String videoPath) async{
     Reference reference = FirebaseStorage.instance.ref().child("videos").child(videoID);
-    UploadTask uploadTask = reference.putFile(_compressVideo(videoPath));
+    UploadTask uploadTask = reference.putFile(await _compressVideo(videoPath));
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
@@ -81,7 +82,7 @@ class VideoUploadController extends GetxController{
   _compressVideo(String videoPath) async{
     final compressedVideo =
     await VideoCompress.compressVideo(videoPath,
-        quality: VideoQuality.LowQuality);
+        quality: VideoQuality.MediumQuality);
     return compressedVideo!.file;
   }
 }

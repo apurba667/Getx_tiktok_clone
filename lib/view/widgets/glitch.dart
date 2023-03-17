@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../constant.dart';
+import '../../constants.dart';
 
 class GlithEffect extends StatefulWidget {
   GlithEffect({required this.child});

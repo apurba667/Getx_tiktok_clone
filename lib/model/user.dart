@@ -8,9 +8,9 @@ class MyUser {
 
   MyUser(
       {required this.uid,
-      required this.email,
-      required this.name,
-      required this.profilePhoto});
+        required this.email,
+        required this.name,
+        required this.profilePhoto});
 
   //App - Firebase(map accept kore)
   Map<String, dynamic> toJson() {

@@ -6,17 +6,18 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktokclone/model/user.dart';
 import 'package:tiktokclone/view/screens/auth/login_screen.dart';
-import 'package:tiktokclone/view/screens/home_screen.dart';
+
+import '../view/screens/Home.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   File? proImg;
   // image peaker
   pickImage()async{
-  final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  if(image == null) return;
-  final img = File(image.path);
-  this.proImg = img;
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(image == null) return;
+    final img = File(image.path);
+    this.proImg = img;
   }
 
 

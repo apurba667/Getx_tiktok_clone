@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -19,16 +17,16 @@ class Video{
   Video({
     required this.username,
     required this.uid,
-    required this.thumbnail,
-    required this.caption,
-    required this.commentsCount,
-    required this.id,
-    required this.likes,
-    required this.profilePic,
-    required this.shareCount,
-    required this.songName,
-    required this.videoUrl
-  });
+  required this.thumbnail,
+  required this.caption,
+  required this.commentsCount,
+  required this.id,
+  required this.likes,
+  required this.profilePic,
+  required this.shareCount,
+  required this.songName,
+  required this.videoUrl
+});
 
   Map<String, dynamic> toJson()=>{
     "username" : username,
@@ -49,17 +47,17 @@ class Video{
     var sst = snap.data() as Map<String,dynamic>;
 
     return Video(
-        username: sst["username"],
-        uid: sst["uid"],
-        id: sst["id"],
-        likes: sst["likes"],
-        commentsCount:  sst['commentsCount'],
-        caption:  sst["caption"],
-        shareCount: sst["shareCount"],
-        songName: sst["songName"],
-        thumbnail: sst["thumbnail"],
-        profilePic: sst["profilePic"],
-        videoUrl: sst["videoUrl"]
+      username: sst["username"],
+      uid: sst["uid"],
+      id: sst["id"],
+      likes: sst["likes"],
+      commentsCount:  sst['commentsCount'],
+      caption:  sst["caption"],
+      shareCount: sst["shareCount"],
+      songName: sst["songName"],
+      thumbnail: sst["thumbnail"],
+      profilePic: sst["profilePic"],
+      videoUrl: sst["videoUrl"]
     );
   }
 
